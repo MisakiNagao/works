@@ -3,11 +3,23 @@ try {
   // DBに接続する
   function connect_db()
   {
-    $param = 'mysql:host=sample-shop_mysql_1;port=3306;dbname=works;';
-    $pdo = new PDO($param, "root", "password");
+    $host = '3.27.110.115'; // AWS EC2上のMySQLサーバーのホスト名またはIPアドレス
+    $port = '3306'; // MySQLのポート番号（通常は3306）
+    $dbname = 'works'; // データベース名
+    $username = 'root'; // MySQLのユーザー名
+    $password = 'Iammisaki1218'; // MySQLのパスワード
+
+    $param = "mysql:host=$host;port=$port;dbname=$dbname;";
+    $pdo = new PDO($param, $username, $password);
     $pdo->query('SET NAMES utf8;');
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     return $pdo;
+
+    // $param = 'mysql:host=sample-shop_mysql_1;port=3306;dbname=works;';
+    // $pdo = new PDO($param, "root", "password");
+    // $pdo->query('SET NAMES utf8;');
+    // $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // return $pdo;
   }
 
   // 日付を日(曜日)の形式に変換する
