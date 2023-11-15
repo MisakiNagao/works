@@ -3,7 +3,6 @@ use function PHPSTORM_META\elementType;
 require_once(dirname(__FILE__) . '/functions.php');
 
 try {
-  $err = ''; 
   // 1.ログイン状態をチェック
   session_start();
 
