@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__) . '/functions.php');
 
 try {
-  $err = ''; 
+  $err = array();
   session_start();
 
   if (isset($_SESSION['USER'])) {
