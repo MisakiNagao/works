@@ -5,6 +5,11 @@ require_once(dirname(__FILE__) . '/functions.php');
 try {
   // 1.ログイン状態をチェック
   session_start();
+  $err = array();
+  $modal_start_time ="";
+  $modal_end_time ="";
+  $modal_break_time = "";
+  $modal_comment = "";
 
   if (!isset($_SESSION['USER'])) {
     // ログインされていない場合はログイン画面へ
@@ -16,7 +21,7 @@ try {
 
   $pdo = connect_db();
 
-  $err = array();
+  
   // モーダルの自動表示判定
   $modal_view_flg = TRUE;
   $target_date = date('y-m-d');
