@@ -267,7 +267,7 @@ try {
                     <div class="input-group-prepend">
                       <button type="button" class="input-group-text" id="start_btn">打刻</button>
                     </div>
-                    <div class="invalid-feedback"><?= $err['modal_start_time'] ?></div>
+                    <div class="invalid-feedback"><?=(isset($err['modal_start_time'])) ?  $err['modal_start_time'] : '' ?></div>
                   </div>
                 </div>
                 <div class="col-sm">
@@ -276,19 +276,19 @@ try {
                     <div class="input-group-prepend">
                       <button type="button" class="input-group-text" id="end_btn">打刻</button>
                     </div>
-                    <div class="invalid-feedback"><?= $err['modal_end_time'] ?></div>
+                    <div class="invalid-feedback"><?=(isset($err['modal_end_time'])) ?  $err['modal_end_time'] : '' ?></div>
                   </div>
                 </div>
                 <div class="col-sm">
                   <div class="input-group">
                     <input type="text" class="form-control <?php if (isset($err['modal_break_time'])) echo 'is-invalid'; ?>" placeholder="休憩" id="Modal_break_time" name="Modal_break_time" value="<?=(isset($modal_end_time)) ? format_date($modal_break_time) : ''  ?>">
-                    <div class="invalid-feedback"><?= $err['modal_break_time'] ?></div>
+                    <div class="invalid-feedback"><?=(isset($err['modal_break_time'])) ?  $err['modal_break_time'] : '' ?></div>
                   </div>
                 </div>
               </div>
               <div class="form-group pt-3">
                 <textarea class="form-control <?php if (isset($err['modal_comment'])) echo 'is-invalid'; ?>" id="Modal_comment" name="Modal_comment" rows="5" placeholder="業務内容"><?=(isset($modal_end_time)) ?  $modal_comment  : ''  ?></textarea>
-                <div class="invalid-feedback"><?= $err['modal_comment'] ?></div>
+                <div class="invalid-feedback"><?=(isset($err['modal_comment'])) ?  $err['modal_comment'] : '' ?></div>
               </div>
             </div>
           </div>
