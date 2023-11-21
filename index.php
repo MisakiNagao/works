@@ -1,15 +1,19 @@
 <?php
 use function PHPSTORM_META\elementType;
 require_once(dirname(__FILE__) . '/functions.php');
-
+$err = array();
+$modal_start_time ='';
+$modal_end_time ='';
+$modal_break_time = '';
+$modal_comment = '';
+$yyyymm ='';
+$day_count='';
+$target_date ='';
+$modal_view_flg ='';
 try {
   // 1.ログイン状態をチェック
   session_start();
-  $err = array();
-  $modal_start_time ="";
-  $modal_end_time ="";
-  $modal_break_time = "";
-  $modal_comment = "";
+
 
   if (!isset($_SESSION['USER'])) {
     // ログインされていない場合はログイン画面へ
