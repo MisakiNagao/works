@@ -15,7 +15,7 @@ try {
   session_start();
 
 
-  if (!isset($_SESSION['USER'])) {
+  if (!array_key_exists('USER',$_SESSION)) {
     // ログインされていない場合はログイン画面へ
     redirect('/login.php');
   }
