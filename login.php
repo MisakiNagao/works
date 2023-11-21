@@ -84,11 +84,11 @@ try {
     <h1 class="h3 my-3">Login</h1>
     <div class="form-group pt-3">
       <input type="text" class="form-control rounded-pill <?php if (!is_null($err) && isset($err['user_no'])) echo 'is-invalid'; ?>" name="user_no" value="<?= $user_no ?>" placeholder="社員番号" required>
-      <div class="invalid-feedback"><?= $err['user_no'] ?></div>
+      <div class="invalid-feedback"><?php  if (!is_null($err) && isset($err['user_no'])) echo 'is-invalid';  ?></div>
     </div>
     <div class="form-group">
       <input type="password" class="form-control rounded-pill <?php if (!is_null($err) && isset($err['password'])) echo 'is-invalid'; ?>" name="password" placeholder="パスワード">
-      <div class="invalid-feedback"><?= $err['password'] ?></div>
+      <div class="invalid-feedback"><?php if (!is_null($err) && isset($err['password'])) echo 'is-invalid'; ?></div>
     </div>
     <button type="submit" class="btn btn-primary rounded-pill">ログイン</button>
     <input type="hidden" name="CSRF_TOKEN" value="<?= $_SESSION['CSRF_TOKEN'] ?>"> 
