@@ -7,9 +7,9 @@ $modal_end_time ='';
 $modal_break_time = '';
 $modal_comment = '';
 $yyyymm ='';
-$day_count='';
+$day_count= 0;
 $target_date ='';
-$modal_view_flg ='';
+$modal_view_flg =TRUE;
 try {
   // 1.ログイン状態をチェック
   session_start();
@@ -200,8 +200,10 @@ try {
         </tr>
       </thead>
       <tbody>
-        <?php for ($i = 1; $i <= $day_count; $i++) : ?>
-          <?php
+        <?php
+        if (isset($day_count)) {
+          for ($i = 1; $i <= $day_count; $i++) : 
+          
           $start_time = '';
           $end_time = '';
           $break_time = '';
@@ -227,7 +229,7 @@ try {
               $comment = $work['comment'];
             }
           }
-          ?>
+        ?>
           <tr>
             <th scope="row"><?= time_format_dw($yyyymm . '-' . $i) ?></th>
             <td><?= substr($start_time, 0, 5) ?></td>
@@ -236,7 +238,7 @@ try {
             <td><?=  h($comment)  ?></td>
             <td><button type="button" class="btn btn-default h-auto py-0" data-toggle="modal" data-target="#inputModal" data-day="<?= $yyyymm . '-' . sprintf('%02d', $i) ?>"><i class="fas fa-pencil-alt"></i></button></td>
           </tr>
-        <?php endfor; ?>
+        <?php endfor; }?>
       </tbody>
     </table>
   </form>
@@ -256,12 +258,12 @@ try {
           <div class="modal-body">
             <div class="container">
               <div class="alert alert-primary" role="alert">
-                <?= date('n', strtotime($target_date)) ?>/<span id="Modal_day"><?= time_format_dw($target_date) ?></span>
+                <?= (isset($target_date)) ? date('n', strtotime($target_date)) . '/' : '' ?><span id="Modal_day"><?= (isset($target_date)) ? time_format_dw($target_date) : '' ?></span>
               </div>
               <div class="row">
                 <div class="col-sm">
                   <div class="input-group">
-                    <input type="text" class="form-control <?php if (isset($err['modal_start_time'])) echo 'is-invalid'; ?>" placeholder="出勤" id="Modal_start_time" name="Modal_start_time" value="<?= format_date($modal_start_time) ?>" required>
+                    <input type="text" class="form-control <?php if (isset($err['modal_start_time'])) echo 'is-invalid'; ?>" placeholder="出勤" id="Modal_start_time" name="Modal_start_time" value="<?= (isset($modal_start_time)) ?  format_date($modal_start_time) : '' ?>" required>
                     <div class="input-group-prepend">
                       <button type="button" class="input-group-text" id="start_btn">打刻</button>
                     </div>
@@ -270,7 +272,7 @@ try {
                 </div>
                 <div class="col-sm">
                   <div class="input-group">
-                    <input type="text" class="form-control <?php if (isset($err['modal_end_time'])) echo 'is-invalid'; ?>" placeholder="退勤" id="Modal_end_time" name="Modal_end_time" value="<?= format_date($modal_end_time) ?>">
+                    <input type="text" class="form-control <?php if (isset($err['modal_end_time'])) echo 'is-invalid'; ?>" placeholder="退勤" id="Modal_end_time" name="Modal_end_time" value="<?=(isset($modal_end_time)) ?  format_date($modal_end_time) : '' ?>">
                     <div class="input-group-prepend">
                       <button type="button" class="input-group-text" id="end_btn">打刻</button>
                     </div>
@@ -279,13 +281,13 @@ try {
                 </div>
                 <div class="col-sm">
                   <div class="input-group">
-                    <input type="text" class="form-control <?php if (isset($err['modal_break_time'])) echo 'is-invalid'; ?>" placeholder="休憩" id="Modal_break_time" name="Modal_break_time" value="<?= format_date($modal_break_time) ?>">
+                    <input type="text" class="form-control <?php if (isset($err['modal_break_time'])) echo 'is-invalid'; ?>" placeholder="休憩" id="Modal_break_time" name="Modal_break_time" value="<?=(isset($modal_end_time)) ? format_date($modal_break_time) : ''  ?>">
                     <div class="invalid-feedback"><?= $err['modal_break_time'] ?></div>
                   </div>
                 </div>
               </div>
               <div class="form-group pt-3">
-                <textarea class="form-control <?php if (isset($err['modal_comment'])) echo 'is-invalid'; ?>" id="Modal_comment" name="Modal_comment" rows="5" placeholder="業務内容"><?= $modal_comment ?></textarea>
+                <textarea class="form-control <?php if (isset($err['modal_comment'])) echo 'is-invalid'; ?>" id="Modal_comment" name="Modal_comment" rows="5" placeholder="業務内容"><?=(isset($modal_end_time)) ?  $modal_comment  : ''  ?></textarea>
                 <div class="invalid-feedback"><?= $err['modal_comment'] ?></div>
               </div>
             </div>
