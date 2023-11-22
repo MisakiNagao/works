@@ -9,5 +9,5 @@
   <!-- Original CSS -->
   <link rel="stylesheet" href="/css/style.css">
 
-  <title><?= $page_title ?></title>
+  <title><?php if (isset($page_title)) {echo $page_title;} ?></title>
 </head>
