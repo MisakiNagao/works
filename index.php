@@ -1,31 +1,32 @@
 <?php
+
 use function PHPSTORM_META\elementType;
+
 require_once(dirname(__FILE__) . '/functions.php');
 $err = array();
-$modal_start_time ='';
-$modal_end_time ='';
+$modal_start_time = '';
+$modal_end_time = '';
 $modal_break_time = '';
 $modal_comment = '';
-$yyyymm ='';
-$day_count= 0;
-$target_date ='';
-$modal_view_flg =TRUE;
+$yyyymm = '';
+$day_count = 0;
+$target_date = '';
+$modal_view_flg = TRUE;
 try {
   // 1.ログイン状態をチェック
   session_start();
 
-
-  if (!array_key_exists('USER',$_SESSION)) {
+  // ログインユーザーの情報をセッションから取得
+  if (array_key_exists('USER', $_SESSION)) {
+    $session_user = $_SESSION['USER'];
+  } else {
     // ログインされていない場合はログイン画面へ
     redirect('/login.php');
   }
 
-  // ログインユーザーの情報をセッションから取得
-  $session_user = $_SESSION['USER'];
-
   $pdo = connect_db();
 
-  
+
   // モーダルの自動表示判定
   $modal_view_flg = TRUE;
   $target_date = date('y-m-d');
@@ -60,19 +61,18 @@ try {
     }
 
     // 今月～過去12カ月の範囲内かどうか
-    $check_date = new DateTime($yyyymm.'-01');
+    $check_date = new DateTime($yyyymm . '-01');
     $start_date = new DateTime('first day of -11 month 00:00');
     $end_date = new DateTime('first day of this month 00:00');
 
-    if($check_date < $start_date || $end_date < $check_date){
+    if ($check_date < $start_date || $end_date < $check_date) {
       throw new Exception('日付の範囲が不正', 500);
     }
 
-    if($check_date != $end_date){
+    if ($check_date != $end_date) {
       // 表示している画面が当月でなければモーダルを出さない
       $modal_view_flg = FALSE;
     }
-
   } else {
     $yyyymm = date('Y-m');
     $day_count = date('t');
@@ -202,43 +202,44 @@ try {
       <tbody>
         <?php
         if (isset($day_count)) {
-          for ($i = 1; $i <= $day_count; $i++) : 
-          
-          $start_time = '';
-          $end_time = '';
-          $break_time = '';
-          $comment = '';
+          for ($i = 1; $i <= $day_count; $i++) :
 
-          if (isset($work_list[date('Y-m-d', strtotime($yyyymm . '-' . $i))])) {
+            $start_time = '';
+            $end_time = '';
+            $break_time = '';
+            $comment = '';
 
-            $work = $work_list[date('Y-m-d', strtotime($yyyymm . '-' . $i))];
+            if (isset($work_list[date('Y-m-d', strtotime($yyyymm . '-' . $i))])) {
 
-            if ($work['start_time']) {
-              $start_time = $work['start_time'];
+              $work = $work_list[date('Y-m-d', strtotime($yyyymm . '-' . $i))];
+
+              if ($work['start_time']) {
+                $start_time = $work['start_time'];
+              }
+
+              if ($work['end_time']) {
+                $end_time = $work['end_time'];
+              }
+
+              if ($work['break_time']) {
+                $break_time = $work['break_time'];
+              }
+
+              if ($work['comment']) {
+                $comment = $work['comment'];
+              }
             }
-
-            if ($work['end_time']) {
-              $end_time = $work['end_time'];
-            }
-
-            if ($work['break_time']) {
-              $break_time = $work['break_time'];
-            }
-
-            if ($work['comment']) {
-              $comment = $work['comment'];
-            }
-          }
         ?>
-          <tr>
-            <th scope="row"><?= time_format_dw($yyyymm . '-' . $i) ?></th>
-            <td><?= substr($start_time, 0, 5) ?></td>
-            <td><?= substr($end_time, 0, 5) ?></td>
-            <td><?= substr($break_time, 0, 5) ?></td>
-            <td><?=  h($comment)  ?></td>
-            <td><button type="button" class="btn btn-default h-auto py-0" data-toggle="modal" data-target="#inputModal" data-day="<?= $yyyymm . '-' . sprintf('%02d', $i) ?>"><i class="fas fa-pencil-alt"></i></button></td>
-          </tr>
-        <?php endfor; }?>
+            <tr>
+              <th scope="row"><?= time_format_dw($yyyymm . '-' . $i) ?></th>
+              <td><?= substr($start_time, 0, 5) ?></td>
+              <td><?= substr($end_time, 0, 5) ?></td>
+              <td><?= substr($break_time, 0, 5) ?></td>
+              <td><?= h($comment)  ?></td>
+              <td><button type="button" class="btn btn-default h-auto py-0" data-toggle="modal" data-target="#inputModal" data-day="<?= $yyyymm . '-' . sprintf('%02d', $i) ?>"><i class="fas fa-pencil-alt"></i></button></td>
+            </tr>
+        <?php endfor;
+        } ?>
       </tbody>
     </table>
   </form>
@@ -267,28 +268,28 @@ try {
                     <div class="input-group-prepend">
                       <button type="button" class="input-group-text" id="start_btn">打刻</button>
                     </div>
-                    <div class="invalid-feedback"><?=(isset($err['modal_start_time'])) ?  $err['modal_start_time'] : '' ?></div>
+                    <div class="invalid-feedback"><?= (isset($err['modal_start_time'])) ?  $err['modal_start_time'] : '' ?></div>
                   </div>
                 </div>
                 <div class="col-sm">
                   <div class="input-group">
-                    <input type="text" class="form-control <?php if (isset($err['modal_end_time'])) echo 'is-invalid'; ?>" placeholder="退勤" id="Modal_end_time" name="Modal_end_time" value="<?=(isset($modal_end_time)) ?  format_date($modal_end_time) : '' ?>">
+                    <input type="text" class="form-control <?php if (isset($err['modal_end_time'])) echo 'is-invalid'; ?>" placeholder="退勤" id="Modal_end_time" name="Modal_end_time" value="<?= (isset($modal_end_time)) ?  format_date($modal_end_time) : '' ?>">
                     <div class="input-group-prepend">
                       <button type="button" class="input-group-text" id="end_btn">打刻</button>
                     </div>
-                    <div class="invalid-feedback"><?=(isset($err['modal_end_time'])) ?  $err['modal_end_time'] : '' ?></div>
+                    <div class="invalid-feedback"><?= (isset($err['modal_end_time'])) ?  $err['modal_end_time'] : '' ?></div>
                   </div>
                 </div>
                 <div class="col-sm">
                   <div class="input-group">
-                    <input type="text" class="form-control <?php if (isset($err['modal_break_time'])) echo 'is-invalid'; ?>" placeholder="休憩" id="Modal_break_time" name="Modal_break_time" value="<?=(isset($modal_end_time)) ? format_date($modal_break_time) : ''  ?>">
-                    <div class="invalid-feedback"><?=(isset($err['modal_break_time'])) ?  $err['modal_break_time'] : '' ?></div>
+                    <input type="text" class="form-control <?php if (isset($err['modal_break_time'])) echo 'is-invalid'; ?>" placeholder="休憩" id="Modal_break_time" name="Modal_break_time" value="<?= (isset($modal_end_time)) ? format_date($modal_break_time) : ''  ?>">
+                    <div class="invalid-feedback"><?= (isset($err['modal_break_time'])) ?  $err['modal_break_time'] : '' ?></div>
                   </div>
                 </div>
               </div>
               <div class="form-group pt-3">
-                <textarea class="form-control <?php if (isset($err['modal_comment'])) echo 'is-invalid'; ?>" id="Modal_comment" name="Modal_comment" rows="5" placeholder="業務内容"><?=(isset($modal_end_time)) ?  $modal_comment  : ''  ?></textarea>
-                <div class="invalid-feedback"><?=(isset($err['modal_comment'])) ?  $err['modal_comment'] : '' ?></div>
+                <textarea class="form-control <?php if (isset($err['modal_comment'])) echo 'is-invalid'; ?>" id="Modal_comment" name="Modal_comment" rows="5" placeholder="業務内容"><?= (isset($modal_end_time)) ?  $modal_comment  : ''  ?></textarea>
+                <div class="invalid-feedback"><?= (isset($err['modal_comment'])) ?  $err['modal_comment'] : '' ?></div>
               </div>
             </div>
           </div>
@@ -319,7 +320,7 @@ try {
       const hour = now.getHours().toString().padStart(2, '0');
       const minute = now.getMinutes().toString().padStart(2, '0');
       $('#Modal_start_time').val(hour + ':' + minute);
-    })  
+    })
 
     $('#end_btn').click(function() {
       const now = new Date();
@@ -357,4 +358,5 @@ try {
     })
   </script>
 </body>
+
 </html>
