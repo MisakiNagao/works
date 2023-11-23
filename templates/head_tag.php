@@ -9,5 +9,8 @@
   <!-- Original CSS -->
   <link rel="stylesheet" href="/css/style.css">
 
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
   <title><?php if (isset($page_title)) {echo $page_title;} ?></title>
 </head>
