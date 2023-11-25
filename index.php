@@ -34,7 +34,7 @@ try {
   // 対象日のデータがあるかどうかチェック
   $sql = "SELECT id, start_time, end_time, break_time, comment FROM work WHERE user_id = :user_id AND date = :date LIMIT 1";
   $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':user_id', (int)$session_user['id'], PDO::PARAM_INT);
+  $stmt->bindValue(':user_id', (int)$session_user, PDO::PARAM_INT);
   $stmt->bindValue(':date', date('Y-m-d'), PDO::PARAM_STR);
   $stmt->execute();
   $today_work = $stmt->fetch();
@@ -80,7 +80,7 @@ try {
 
   $sql = "SELECT date, id, start_time, end_time, break_time, comment FROM work WHERE user_id = :user_id AND DATE_FORMAT(date,'%Y-%m') = :date";
   $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':user_id', (int)$session_user['id'], PDO::PARAM_INT);
+  $stmt->bindValue(':user_id', (int)$session_user, PDO::PARAM_INT);
   $stmt->bindValue(':date', $yyyymm, PDO::PARAM_STR);
   $stmt->execute();
   $work_list = $stmt->fetchAll(PDO::FETCH_UNIQUE);
@@ -123,7 +123,7 @@ try {
       // 対象日のデータがあるかどうかチェック
       $sql = "SELECT id FROM work WHERE user_id = :user_id AND date = :date LIMIT 1";
       $stmt = $pdo->prepare($sql);
-      $stmt->bindValue(':user_id', (int)$session_user['id'], PDO::PARAM_INT);
+      $stmt->bindValue(':user_id', (int)$session_user, PDO::PARAM_INT);
       $stmt->bindValue(':date', $target_date, PDO::PARAM_STR);
       $stmt->execute();
       $work = $stmt->fetch();
@@ -142,7 +142,7 @@ try {
         // 対象日のデータがなければinsert
         $sql = "INSERT INTO work (user_id, date, start_time, end_time, break_time, comment) VALUES(:user_id, :date, :start_time, :end_time, :break_time, :comment)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':user_id', (int)$session_user['id'], PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', (int)$session_user, PDO::PARAM_INT);
         $stmt->bindValue(':date', $target_date, PDO::PARAM_STR);
         $stmt->bindValue(':start_time', $modal_start_time, PDO::PARAM_STR);
         $stmt->bindValue(':end_time', $modal_end_time, PDO::PARAM_STR);
@@ -154,7 +154,7 @@ try {
 
       $sql = "SELECT date, id, start_time, end_time, break_time, comment FROM work WHERE user_id = :user_id AND DATE_FORMAT(date,'%Y-%m') = :date";
       $stmt = $pdo->prepare($sql);
-      $stmt->bindValue(':user_id', (int)$session_user['id'], PDO::PARAM_INT);
+      $stmt->bindValue(':user_id', (int)$session_user, PDO::PARAM_INT);
       $stmt->bindValue(':date', $yyyymm, PDO::PARAM_STR);
       $stmt->execute();
       $work_list = $stmt->fetchAll(PDO::FETCH_UNIQUE);
